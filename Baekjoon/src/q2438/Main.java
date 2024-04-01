@@ -5,7 +5,7 @@ import java.util.Scanner;
 public class Main {
 	public static void main(String[] args) {
 		Scanner sc = new Scanner(System.in);
-		int N = sc.nextInt(); // 사용자로부터 N 값 입력 받기
+		int N = sc.nextInt(); //N 값 입력 받기
 		sc.close();
 
 		for (int i = 1; i <= N; i++) { // 1부터 N까지 반복
