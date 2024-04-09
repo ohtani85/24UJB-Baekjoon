@@ -1,74 +1,122 @@
 package q10845;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.io.IOException;
-import java.util.LinkedList;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
 
 public class Main {
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-		int N = Integer.parseInt(br.readLine());
+		try {
+			String line = br.readLine();
+			int n = Integer.parseInt(line);
+			SJQueue q = new SJQueue(10000);
+			for (int i = 0; i < n; i++) {
+				line = br.readLine();
+				StringTokenizer st = new StringTokenizer(line);
 
-		Queue queue = new Queue();
+				String cmd = "";
+				String value = "";
 
-		for (int i = 0; i < N; i++) {
-			String[] command = br.readLine().split(" ");
+				if (st.countTokens() == 2) {
+					cmd = st.nextToken();
+					value = st.nextToken();
+				} else {
+					cmd = st.nextToken();
+				}
 
-			switch (command[0]) {
-			case "push":
-				queue.push(Integer.parseInt(command[1]));
-				break;
-			case "pop":
-				bw.write(queue.pop() + "\n");
-				break;
-			case "size":
-				bw.write(queue.size() + "\n");
-				break;
-			case "empty":
-				bw.write(queue.empty() + "\n");
-				break;
-			case "front":
-				bw.write(queue.front() + "\n");
-				break;
-			case "back":
-				bw.write(queue.back() + "\n");
-				break;
+				switch (cmd) {
+				case "push":
+					int v = Integer.parseInt(value);
+					q.push(v);
+					break;
+				case "pop":
+					q.pop();
+					break;
+				case "front":
+					q.front();
+					break;
+				case "back":
+					q.back();
+					break;
+				case "size":
+					int size = q.size();
+					System.out.println(size);
+					break;
+				case "empty":
+					q.empty();
+					break;
+				}
 			}
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
-		br.close();
-		bw.flush();
-		bw.close();
+	}
+}
+
+class SJQueue {
+	private int[] ar;
+	private int front;
+	private int back;
+
+	public SJQueue(int size) {
+		ar = new int[size];
+		front = -1;
+		back = -1;
 	}
 
-	static class Queue {
-		LinkedList<Integer> queue = new LinkedList<>();
-
-		void push(int number) {
-			queue.addLast(number);
+	public void push(int x) {
+		if (front == -1) {
+			front++;
+			ar[++back] = x;
+		} else {
+			ar[++back] = x;
 		}
+	}
 
-		int pop() {
-			return queue.isEmpty() ? -1 : queue.pollFirst();
+	public void pop() {
+		if (size() == 0) {
+			System.out.println("-1");
+		} else if (size() == 1) {
+			System.out.println(ar[front++]);
+			front = -1;
+			back = -1;
+		} else {
+			System.out.println(ar[front++]);
 		}
+	}
 
-		int size() {
-			return queue.size();
+	public int size() {
+		if (front == -1 && back == -1) {
+			return 0;
+		} else
+			return back - front + 1;
+	}
+
+	public boolean empty() {
+		if (size() == 0) {
+			System.out.println("1");
+			return true;
+		} else {
+			System.out.println("0");
+			return false;
 		}
+	}
 
-		int empty() {
-			return queue.isEmpty() ? 1 : 0;
+	public void front() {
+		if (size() == 0) {
+			System.out.println("-1");
+		} else {
+			System.out.println(ar[front]);
 		}
+	}
 
-		int front() {
-			return queue.isEmpty() ? -1 : queue.getFirst();
-		}
-
-		int back() {
-			return queue.isEmpty() ? -1 : queue.getLast();
+	public void back() {
+		if (size() == 0) {
+			System.out.println("-1");
+		} else {
+			System.out.println(ar[back]);
 		}
 	}
 }
